@@ -1,0 +1,112 @@
+class Airline:
+    def __init__(self, airlinename, airlinecode):
+        self.airlinename = airlinename
+        self.airlinecode = airlinecode
+
+
+class Passenger:
+    def __init__(self, name, gender, age):
+        self.name = name
+        self.gender = gender
+        self.age = age
+
+
+class Flight:
+    def __init__(self, source, destination, fare, flightno):
+        self.source = source
+        self.destination = destination
+        self.fare = fare
+        self.flightno = flightno
+
+
+class Reservation:
+    def __init__(self, air, pass_, fly):
+        self.passenger = pass_
+        self.airline = air
+        self.flight = fly
+
+    def print_flight(self):
+        print("\nThe following are the details of the flight available:")
+        print("Airline Code:", self.airline.airlinecode)
+        print("Airline Name:", self.airline.airlinename)
+        print("Flight No.:", self.flight.flightno)
+        print("Flight Source:", self.flight.source)
+        print("Flight Destination:", self.flight.destination)
+        print("Calculated Fare:", self.flight.fare)
+
+    def confirm_booking(self):
+        print("\n\n-------------------------Ticket-------------------------")
+        print(f"Hi {self.passenger.name}, Your ticket has been confirmed for Flight No. {self.flight.flightno} "
+              f"with Airline code No. {self.airline.airlinecode} {self.airline.airlinename} Airlines. "
+              f"Here are the details:\n")
+        print("Name:", self.passenger.name)
+        print("Age:", self.passenger.age)
+        print("Gender:", self.passenger.gender)
+        print("\nDeparture:", self.flight.source)
+        print("Arrival:", self.flight.destination)
+        print("Amount:", self.flight.fare)
+
+    def cancel(self):
+        print("\nBooking Status = Cancelled")
+
+
+def main():
+    airlines = ["INDIGO", "VISTARA", "AIRINDIA"]
+    airlinecodes = ["001", "002", "003"]
+    headquarters = ["Mumbai", "Delhi", "Bangalore"]
+    distances = [500, 1700, 3000]
+    flightno = ""
+
+    print("Welcome to the System")
+    name = input("Enter your Name: ")
+    gender = input("Enter Gender: ")
+    age = int(input("Enter your age: "))
+
+    passenger = Passenger(name, gender, age)
+    airline = input("\nWhich Airline you want to travel? (Indigo/Vistara/Air India): ")
+
+    if airline.lower() == "indigo":
+        flightno = "IN00"
+    elif airline.lower() == "vistara":
+        flightno = "VIS00"
+    elif airline.lower() == "airindia":
+        flightno = "AI00"
+
+    airlinecode = ""
+    for i in range(3):
+        if airline.lower() == airlines[i].lower():
+            airlinecode = airlinecodes[i]
+            break
+
+    airline_obj = Airline(airline, airlinecode)
+    source = input("Source? ")
+    destination = input("Destination? ")
+
+    fare = 0
+    for i in range(3):
+        if source == headquarters[i]:
+            flightno += str(i + 1)
+            if fare == 0:
+                fare = distances[i]
+            else:
+                fare = abs((fare - distances[i]) * 5)
+        if destination == headquarters[i]:
+            flightno += str(i + 1)
+            if fare == 0:
+                fare = distances[i]
+            else:
+                fare = abs((fare - distances[i]) * 5)
+
+    flight_obj = Flight(source, destination, fare, flightno)
+    reservation = Reservation(airline_obj, passenger, flight_obj)
+    reservation.print_flight()
+
+    confirmation = input("Do you want to book this flight? (Y/N): ")
+    if confirmation.upper() == "Y":
+        reservation.confirm_booking()
+    else:
+        reservation.cancel()
+
+
+if __name__ == "__main__":
+    main()
